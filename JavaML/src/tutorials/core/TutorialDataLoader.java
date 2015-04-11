@@ -25,6 +25,7 @@ package tutorials.core;
 import java.io.File;
 
 import net.sf.javaml.core.Dataset;
+import net.sf.javaml.filter.normalize.NormalizeMidrange;
 import net.sf.javaml.tools.data.FileHandler;
 
 /**
@@ -51,7 +52,12 @@ public class TutorialDataLoader {
 //        Dataset data = FileHandler.loadDataset(new File("data/School_Safety_Report.csv"), 4, ",");
         Dataset data = FileHandler.loadDataset(new File("data/iris.data"), 4, ",");
         System.out.println(data);
-        data = FileHandler.loadSparseDataset(new File("data/smallsparse.tsv"), 0, " ", ":");
-        System.out.println(data);
+//        data = FileHandler.loadSparseDataset(new File("data/smallsparse.tsv"), 0, " ", ":");
+//        System.out.println(data);
+        //
+        NormalizeMidrange nmr=new NormalizeMidrange(0.5,1);
+        /* Instanciate new filter */
+        nmr.build(data);
+        System.out.println(data); 
     }
 }

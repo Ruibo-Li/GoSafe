@@ -17,3 +17,9 @@
 
 ### Back End
 ----------
+
+
+####
+
+- service package: calling API
+- JavaML : machine learning part
