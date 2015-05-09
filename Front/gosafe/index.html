@@ -9,10 +9,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Freelancer - Start Bootstrap Theme</title>
+    <title>Gosafe</title>
 
     <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+
 
     <!-- Custom CSS -->
     <link href="css/freelancer.css" rel="stylesheet">
@@ -22,6 +23,9 @@
     <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
+    <!-- CSS for video -->
+    <link rel="stylesheet" type="text/css" href="css/video.css">
+    <link href='http://fonts.googleapis.com/css?family=Buenard:700' rel='stylesheet' type='text/css'>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -53,14 +57,18 @@
                     <li class="hidden">
                         <a class="page-scroll" href="#page-top"></a>
                     </li>
-                    <li>
-                        <a class="page-scroll" href="#about">About</a>
+                    <li class="page-scroll">
+                        <a href="#about">About</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="#portfolio">Cities</a>
+                        <a href="#cities">Region</a>
                     </li>
                     
                 </ul>
+                <form class="navbar-form pull-left">
+                    <input type="text" class="form-control" placeholder="Search the zipcode..." id="searchInput">
+                    <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+                </form>
             </div>
             <!-- /.navbar-collapse -->
         </div>
@@ -69,149 +77,108 @@
 
     <!-- Header -->
     <header>
-        <div class="container">
-            <div class="row">
+        <section class="content-section video-section">
+          <div class="pattern-overlay">
+          <a id="bgndVideo" class="player" data-property="{videoURL:'https://www.youtube.com/watch?edit=vd&v=2OzG6sKxH5U',containment:'.video-section', quality:'large', autoPlay:true, mute:true, opacity:1}">bg</a>
+            <div class="container">
+              <div class="row">
                 <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-8 col-lg-offset-2">
-                            <form name="sentMessage" id="contactForm" novalidate>
-                                
-                                <div class="row control-group">
-                                    <div class="form-group col-xs-12 floating-label-form-group controls">
-                                        <label>Location</label>
-                                        <input type="location" class="form-control" placeholder="Location" id="location" required data-validation-required-message="Please enter your location.">
-                                        <p class="help-block text-danger"></p>
-                                    </div>
-                                </div>
-                                <div class="row control-group">
-                                    <div class="form-group col-xs-12 floating-label-form-group controls">
-                                        <label>Zip Code</label>
-                                        <input type="zipcode" class="form-control" placeholder="Zip Code" id="zipcode" required data-validation-required-message="Please enter your zipcode.">
-                                        <p class="help-block text-danger"></p>
-                                    </div>
-                                </div>
-                                <br>
-                                <div id="success"></div>
-                                <div class="row">
-                                    <div class="form-group col-xs-12">
-                                        <button type="submit" class="btn btn-success btn-lg">Submit</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <img class="img-responsive" src="img/s.png" alt="">
-                    
-                </div>
+                <h1>welcome gosafe</h1>  
+                <!-- <h3>Enjoy Adding Full Screen Videos to your Page Sections</h3> -->
+               </div>
+              </div>
             </div>
-        </div>
+          </div> <!-- end patter-overlay -->
+        </section>
+        <!--Video Section Ends Here-->
     </header>
 
     <!-- Portfolio Grid Section -->
-    <section id="services">
+    <section id="cities">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <h2 class="section-heading">Cities</h2>
+                    <h2 class="section-heading">Region</h2>
                     <hr class="primary">
                 </div>
             </div>
         </div>
-    </section>
+    
      
 
-    <section class="no-padding" id="portfolio">
-        <div class="container-fluid">
-            <div class="row no-gutter">
-                <div class="col-lg-4 col-sm-6">
-                    <a href="#" class="portfolio-box">
-                        <img src="img/portfolio/nyc.png" class="img-responsive" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="portfolio-box-caption-content">
+        <div class="no-padding" id="portfolio">
+            <div class="container-fluid">
+                <div class="row no-gutter">
+                    <div class="col-lg-4 col-sm-6">
+                        <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
+                            
+                            <img src="img/portfolio/nyc.png" class="img-responsive" alt="">
+                            <div class="portfolio-box-caption">
+                                <div class="portfolio-box-caption-content">
                                 
-                                <div class="project-name">
-                                    New York City
+                                    <div class="project-name">
+                                         New York City
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a href="#" class="portfolio-box">
-                        <img src="img/portfolio/nyc.png" class="img-responsive" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="portfolio-box-caption-content">
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                        <a href="#" class="portfolio-box">
+                            <img src="img/portfolio/brooklyn.png" class="img-responsive" alt="">
+                            <div class="portfolio-box-caption">
+                                <div class="portfolio-box-caption-content">
                                 
-                                <div class="project-name">
-                                    New York City
+                                    <div class="project-name">
+                                        Brooklyn
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a href="#" class="portfolio-box">
-                        <img src="img/portfolio/nyc.png" class="img-responsive" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="portfolio-box-caption-content">
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                        <a href="#" class="portfolio-box">
+                            <img src="img/portfolio/queen.png" class="img-responsive" alt="">
+                            <div class="portfolio-box-caption">
+                                <div class="portfolio-box-caption-content">
                                 
-                                <div class="project-name">
-                                    New York City
+                                    <div class="project-name">
+                                        Queen
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a href="#" class="portfolio-box">
-                        <img src="img/portfolio/nyc.png" class="img-responsive" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="portfolio-box-caption-content">
-                                
-                                <div class="project-name">
-                                    New York City
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a href="#" class="portfolio-box">
-                        <img src="img/portfolio/nyc.png" class="img-responsive" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="portfolio-box-caption-content">
-                                
-                                <div class="project-name">
-                                    New York City
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <a href="#" class="portfolio-box">
-                        <img src="img/portfolio/nyc.png" class="img-responsive" alt="">
-                        <div class="portfolio-box-caption">
-                            <div class="portfolio-box-caption-content">
-                                
-                                <div class="project-name">
-                                    New York City
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-
     <!-- About Section -->
-    
+    <section class="success" id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>About</h2>
+                    <hr class="star-light">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-lg-offset-2">
+                    <p>Freelancer is a free bootstrap theme created by Start Bootstrap. The download includes the complete source files including HTML, CSS, and JavaScript as well as optional LESS stylesheets for easy customization.</p>
+                </div>
+                <div class="col-lg-4">
+                    <p>Whether you're a student looking to showcase your work, a professional looking to attract clients, or a graphic artist looking to share your projects, this template is the perfect starting point!</p>
+                </div>
+                
+            </div>
+        </div>
+    </section>
     <!-- Contact Section -->
     
 
     <!-- Footer -->
     
+
     <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
     <div class="scroll-top page-scroll visible-xs visible-sm">
         <a class="btn btn-primary" href="#page-top">
@@ -454,6 +421,9 @@
     <script src="js/classie.js"></script>
     <script src="js/cbpAnimatedHeader.js"></script>
 
+    <!-- For Video -->
+    <script src="http://pupunzi.com/mb.components/mb.YTPlayer/demo/inc/jquery.mb.YTPlayer.js"></script>
+    <script src="js/video.js"></script>
     <!-- Contact Form JavaScript -->
     <script src="js/jqBootstrapValidation.js"></script>
     <script src="js/contact_me.js"></script>

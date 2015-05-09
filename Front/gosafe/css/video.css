@@ -9,11 +9,13 @@ text-align:center;
 color:#fff;
 }
 .video-section h1{
-font-size:60px;
+font-size:50px;
 /*font-family: 'Buenard', serif;*/
 font-weight:bolder;
 text-transform: uppercase;
 margin: 0px auto 0px;
+position: relative;
+top: 100px;
 text-shadow: 1px 1px 1px #000;
 -webkit-text-shadow: 1px 1px 1px #000;
 -moz-text-shadow: 1px 1px 1px #000;
