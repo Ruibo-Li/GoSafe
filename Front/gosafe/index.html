@@ -253,13 +253,48 @@
                                     </div>
                             </div>
                             
-                            <button type="button" class="btn btn-lg btn-success" > Confirm </button>
+                            <button type="button" class="btn btn-lg btn-success" id="confirm" > Confirm </button>
 
                         </div>
                     </div>
                 </div>
             </div>
             
+	<script type="text/javascript">
+	    var submit = document.getElementById("confirm");
+	    submit.addEventListener("click", function(event) {
+	        event.preventDefault();
+	        plot();
+	    });
+	    
+        function plot() {
+            var request = new XMLHttpRequest();
+            var crime_type = document.getElementById("type").value;
+
+            var query = {
+            		"id": "boge",
+            		"crime_date": "2015-05-10",
+            		"crime_time": "01:00",
+            		"address": "120 120th St",
+            		"zipcode": "10027",
+            		"latitude": "86.87",
+            		"longitude": "-75.1762",
+            		"borough": "Manhattan",
+            		"description": "Bo Li raped a fat black woman.",
+            		"crime_type": crime_type
+            }
+            console.log(query)
+            request.onload = reqListener;
+            request.open("POST", "ReportCrime", true);
+            request.send(JSON.stringify(query));
+        };
+        
+        function reqListener() {
+            var data = JSON.parse(this.responseText);
+            console.log(data);
+        };
+	</script>
+
 
     <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-content">
