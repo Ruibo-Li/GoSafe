@@ -76,22 +76,40 @@
     </nav>
 
     <!-- Header -->
+    
+
     <header>
         <section class="content-section video-section">
           <div class="pattern-overlay">
           <a id="bgndVideo" class="player" data-property="{videoURL:'https://www.youtube.com/watch?edit=vd&v=2OzG6sKxH5U',containment:'.video-section', quality:'large', autoPlay:true, mute:true, opacity:1}">bg</a>
             <div class="container">
-              <div class="row">
-                <div class="col-lg-12">
-                <h1>welcome gosafe</h1>  
-                <!-- <h3>Enjoy Adding Full Screen Videos to your Page Sections</h3> -->
-               </div>
-              </div>
-            </div>
-          </div> <!-- end patter-overlay -->
-        </section>
-        <!--Video Section Ends Here-->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>welcome to gosafe</h1>  
+                        <h3>Your peronalized safeguard</h3>
+                    </div>
+                </div> <!-- end row -->
+            </div> <!-- end container -->
+            <div class="navbar-form navbar-default" data-reactid=".0.0.0">
+                <div class="col-lg-8 col-lg-offset-2">
+                
+                    <input type="date" class="form-control" name="crime_date">
+                    <input type="time" class="form-control" data-reactid=".0.0.0.0.1">
+                    
+                    <input type="text" class="form-control" placeholder="location" name="location" id="location" data-reactid=".0.0.0.0.1">
+                    <input type="text" class="form-control" placeholder="crime type" name="type" id="type" data-reactid=".0.0.0.0.1">
+                     
+                    <a href="#myModal" class="btn btn-lg btn-outline" data-toggle="modal">Report</a>
+          <!-- end
+                </span>
+                </div> <!-- end of col -->
+                </div> <!-- end input-group -->
+
+            </div> <!-- end patter-overlay -->
+
+        </section><!--Video Section Ends Here-->
     </header>
+
 
     <!-- Portfolio Grid Section -->
     <section id="cities">
@@ -110,8 +128,7 @@
             <div class="container-fluid">
                 <div class="row no-gutter">
                     <div class="col-lg-4 col-sm-6">
-                        <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
-                            
+                        <a href="#" class="portfolio-box">
                             <img src="img/portfolio/nyc.png" class="img-responsive" alt="">
                             <div class="portfolio-box-caption">
                                 <div class="portfolio-box-caption-content">
@@ -187,6 +204,63 @@
     </div>
 
     <!-- Portfolio Modals -->
+    <div class="portfolio-modal modal fade" id="myModal">
+        <form role="form">
+            
+            <div class="modal-content">
+                <div class="close-modal" data-dismiss="modal">
+                    <div class="lr">
+                        <div class="rl">
+                        </div>
+                    </div>
+                </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Report 李睿博</h2>
+                            <hr class="star-primary">
+                            <div class="row control-group">
+                                    <div class="col-lg-8 col-lg-offset-2">
+                                        <p>Time: rape</p> 
+                                    </div>
+                                    <div class="col-lg-8 col-lg-offset-2">
+                                        <p>Date: rape</p> 
+                                    </div>
+                                    <div class="col-lg-8 col-lg-offset-2">
+                                        <p>Location: rape</p> 
+                                    </div>
+                                    <div class="col-lg-8 col-lg-offset-2">
+                                        <p>Zipcode: rape</p> 
+                                    </div>
+                                    <div class="col-lg-8 col-lg-offset-2">
+                                        <p>Crime Type: rape</p> 
+                                    </div>
+                                    <div class="container-fluid">
+                                        <div class="col-lg-8 col-lg-offset-2">
+                                            <form role="form">
+                                                <div class="form-group has-success">
+                                                    <label class="control-label" for="inputSuccess">Input with success</label>
+                                                    <input type="text" class="form-control" id="inputSuccess">
+                                                </div>
+                                            </form>
+                                         </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                                        <label>Crime Description</label>
+                                        <textarea rows="5" class="form-control" placeholder="Crime description" id="message" required data-validation-required-message="Please enter the crime description."></textarea>
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                            </div>
+                            
+                            <button type="button" class="btn btn-lg btn-success" > Confirm </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
     <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-content">
             <div class="close-modal" data-dismiss="modal">
