@@ -1,9 +1,9 @@
-/*.video-section .pattern-overlay {
-background-color: rgba(71, 71, 71, .59);
-padding: 200px 100px 32px;
-min-height: 500px; 
+.video-section .pattern-overlay {
+background-color: rgba(71, 71, 71, 0);
+padding: 100px 100px 32px;
+min-height: 400px; 
 /* Incase of overlay problems just increase the min-height*/
-/*}*/
+}
 .video-section h1, .video-section h3{
 text-align:center;
 color:#fff;
@@ -15,7 +15,7 @@ font-weight:bolder;
 text-transform: uppercase;
 margin: 0px auto 0px;
 position: relative;
-top: 100px;
+top: 00px;
 text-shadow: 1px 1px 1px #000;
 -webkit-text-shadow: 1px 1px 1px #000;
 -moz-text-shadow: 1px 1px 1px #000;
@@ -23,7 +23,33 @@ text-shadow: 1px 1px 1px #000;
 .video-section h3{
 font-size: 25px;
 font-weight:lighter;
+text-transform: lowercase;
 margin: 0px auto 15px;
+position: relative;
+top: 60px;
+}
+.video-section .navbar-form{
+    position: relative;
+    /*background-color: rgba(71, 71, 71, 0.59);    */
+    /*top:100px;*/
+    width:100%;
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    /*box-shadow: outset 3px 3px 6px #ccc;*/
+
+    /*padding: 100px 100px 32px*/
 }
 .video-section .buttonBar{display:none;}
 .player {font-size: 1px;}
+
+.video-section .input-group-addon
+{
+    background-color: rgba(71, 71, 71, 0.59);    
+    /*display: inline-block;*/
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    /*text-align: center;*/
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+
+}
