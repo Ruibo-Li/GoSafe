@@ -94,10 +94,10 @@
                 <div class="col-lg-8 col-lg-offset-2">
                 
                     <input id="crime_date" type="date" class="form-control">
-                    <input id="crime_time" type="time" class="form-control" data-reactid=".0.0.0.0.1">
+                    <input id="crime_time" type="time" class="form-control">
                     
-                    <input id="crime_loc" type="text" class="form-control" placeholder="location" name="location" data-reactid=".0.0.0.0.1">
-                    <input type="text" class="form-control" placeholder="crime type" name="type" id="crime_type" data-reactid=".0.0.0.0.1">
+                    <input id="crime_loc" type="text" class="form-control" placeholder="location">
+                    <input id="crime_type" type="text" class="form-control" placeholder="crime type">
                      
                     <a href="#myModal" class="btn btn-lg btn-outline" data-toggle="modal" onclick="myReport()">Report</a>
           <!-- end
@@ -221,20 +221,23 @@
                             <h2>Report 李睿博</h2>
                             <hr class="star-primary">
                             <div class="row control-group">
-                                    <div class="col-lg-8 col-lg-offset-2" id="rpt_time">
-                                        <!-- <p>Time: rape</p>  -->
+                                    <div class="col-lg-8 col-lg-offset-2">
+                                        <p id="rpt_time"></p> 
                                     </div>
                                     <div class="col-lg-8 col-lg-offset-2">
-                                        <p>Date: rape</p> 
+                                        <p id="rpt_date"></p> 
+                                        <!-- <p>Date: rape</p>  -->
                                     </div>
                                     <div class="col-lg-8 col-lg-offset-2">
-                                        <p>Location: rape</p> 
+                                        <p id="rpt_loc"></p> 
+                                        <!-- <p>Location: rape</p>  -->
                                     </div>
                                     <div class="col-lg-8 col-lg-offset-2">
-                                        <p>Zipcode: rape</p> 
+                                        <p>Zipcode: 10027</p> 
                                     </div>
                                     <div class="col-lg-8 col-lg-offset-2">
-                                        <p>Crime Type: rape</p> 
+                                        <p id="rpt_type"></p>
+                                        <!-- <p>Crime Type: rape</p>  -->
                                     </div>
                                     <div class="container-fluid">
                                         <div class="col-lg-8 col-lg-offset-2">
@@ -248,7 +251,7 @@
                                     </div>
                                     <div class="form-group col-xs-12 floating-label-form-group controls">
                                         <label>Crime Description</label>
-                                        <textarea rows="5" class="form-control" placeholder="Crime description" id="message" required data-validation-required-message="Please enter the crime description."></textarea>
+                                        <textarea rows="5" class="form-control" placeholder="Crime description" id="crime_descp" required data-validation-required-message="Please enter the crime description."></textarea>
                                         <p class="help-block text-danger"></p>
                                     </div>
                             </div>
@@ -265,14 +268,12 @@
         var info = {
             "crime_date": "",
             "crime_time": "",
-            "crime_loc": "",
+            "address": "",
             "zipcode": "",
-            // "latitude": "86.87",
-            // "longitude": "-75.1762",
-            // "borough": "Manhattan",
             "description": "",
-            "crime_type": ""            
+            "type": ""            
         };
+
 
 
 
@@ -289,17 +290,34 @@
 
             // Json object
             info.crime_time = document.getElementById("crime_time").value
-            console.log(info.crime_time)
-
-
-
-
+            info.crime_date = document.getElementById("crime_date").value
+            info.type = document.getElementById("crime_type").value
+            info.address = document.getElementById("crime_loc").value
+            
 
             //time 
-            var crime_time_p = document.createElement("p"); 
-            var crime_time = document.createTextNode("Time: " + document.getElementById("crime_time").value);      
-            crime_time_p.appendChild(crime_time);
-            document.getElementById("rpt_time").appendChild(crime_time_p);                
+            document.getElementById("rpt_time").innerHTML = "Time: " + info.crime_time;
+            document.getElementById("rpt_date").innerHTML = "Date: " + info.crime_date;
+            document.getElementById("rpt_type").innerHTML = "Type: " + info.type;
+            document.getElementById("rpt_loc").innerHTML = "Location: " + info.address;
+            // var crime_time = document.createTextNode("Time: " + info.crime_time);      
+            // var crime_time_str = "Time: " + info.crime_time;
+            // crime_time_p.text(crime_time_str);
+            // crime_time_p.innerHTML = crime_time_str;
+            // document.getElementById("rpt_time").appendChild(crime_time_p);  
+
+            // //date
+            // var crime_date_p = document.createElement("p"); 
+            // var crime_date = document.createTextNode("Date: " + info.crime_date);      
+            // crime_date_p.appendChild(crime_date);
+            // document.getElementById("rpt_date").appendChild(crime_date_p);  
+
+            // //location
+            // var crime_loc_p = document.createElement("p"); 
+            // var crime_loc = document.createTextNode("Location: " + info.crime_loc);      
+            // crime_loc_p.appendChild(crime_loc);
+            // document.getElementById("rpt_loc").appendChild(crime_loc_p);  
+
 
         }
 	
@@ -320,24 +338,11 @@
 
         function plot() {
             var request = new XMLHttpRequest();
-            var crime_type = document.getElementById("crime_type").value;
-
-            var query = {
-            		"id": "boge",
-            		"crime_date": "2015-05-10",
-            		"crime_time": "01:00",
-            		"address": "120 120th St",
-            		"zipcode": "10027",
-            		"latitude": "86.87",
-            		"longitude": "-75.1762",
-            		"borough": "Manhattan",
-            		"description": "Bo Li raped a fat black woman.",
-            		"crime_type": crime_type
-            }
-            console.log(query)
+            info.description = document.getElementById("crime_descp").value
+            console.log(info)
             request.onload = reqListener;
             request.open("POST", "ReportCrime", true);
-            request.send(JSON.stringify(query));
+            request.send(JSON.stringify(info));
         };
         
         function reqListener() {
