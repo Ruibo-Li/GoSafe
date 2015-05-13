@@ -3,21 +3,18 @@ import com.amazonaws.util.json.JSONObject;
 
 
 public class Test {
-    public static void test(JSONArray inputJson, double threshold, double conf) throws Exception {
-        String outputfile = "output.txt";
-
+    public static JSONArray getJSONrules(JSONArray inputJson, double threshold, double conf) throws Exception {
+        //String outputfile = "output.txt";
         FrequentItems fi = new FrequentItems(inputJson);
-        fi.setOutputPath(outputfile);
+        //fi.setOutputPath(outputfile);
         if(threshold>=0 && threshold<=1) fi.setThreshold(threshold);
         if(conf>=0 && conf<=1) fi.setMinConf(conf);
         fi.findFrequentPairs().findFrequentAll();
         fi.findRules();
-        fi.printfile();
-        System.out.println("Program safely terminated! Thanks!");
+        return fi.getJsonrules();
     }
     
     public static JSONArray Mapper(JSONArray inputJson) throws Exception{
-    	String[] times = {"Morning","Afternoon","Evening","Night"};
     	JSONArray result = new JSONArray();
     	for(int i=0;i<inputJson.length();i++) {
     		JSONObject cur = inputJson.getJSONObject(i);
@@ -42,7 +39,7 @@ public class Test {
     
     public static void main(String[] args) throws Exception {
     	JSONArray ja = new JSONArray();
-    	/*
+    	
     	JSONObject jo1 = new JSONObject();
     	jo1.put("1", "pen");
     	jo1.put("2", "ink");
@@ -67,8 +64,9 @@ public class Test {
     	jo4.put("3", "soap");
     	ja.put(jo4);
     	
-        test(ja,0.7,0.8);
-        */
+    	System.out.println(getJSONrules(ja,0.7,0.8));
+        
+    	/*
     	JSONObject jo1 = new JSONObject();
     	jo1.put("id", "1");
     	jo1.put("crime_date", "2015-06-12");
@@ -94,5 +92,6 @@ public class Test {
     	ja.put(jo2);
     	
     	System.out.println(Mapper(ja));
+    	*/
     }
 }
