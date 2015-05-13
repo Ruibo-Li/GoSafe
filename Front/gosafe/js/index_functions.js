@@ -20,6 +20,12 @@ function myReport() {
 
 }
 
+function mySearch(){
+    var zipcode = document.getElementById("searchInput").value;
+    var urlstring = "map.html?zipcode=" + zipcode;
+    window.location = urlstring;
+}
+
 function checkDate(){
     var today = new Date();
     var crime_date_dt = new Date(info.crime_date);
