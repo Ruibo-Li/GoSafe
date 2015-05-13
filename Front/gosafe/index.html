@@ -93,13 +93,13 @@
             <div class="navbar-form navbar-default" data-reactid=".0.0.0">
                 <div class="col-lg-8 col-lg-offset-2">
                 
-                    <input type="date" class="form-control" name="crime_date">
-                    <input type="time" class="form-control" data-reactid=".0.0.0.0.1">
+                    <input id="crime_date" type="date" class="form-control">
+                    <input id="crime_time" type="time" class="form-control" data-reactid=".0.0.0.0.1">
                     
-                    <input type="text" class="form-control" placeholder="location" name="location" id="location" data-reactid=".0.0.0.0.1">
-                    <input type="text" class="form-control" placeholder="crime type" name="type" id="type" data-reactid=".0.0.0.0.1">
+                    <input id="crime_loc" type="text" class="form-control" placeholder="location" name="location" data-reactid=".0.0.0.0.1">
+                    <input type="text" class="form-control" placeholder="crime type" name="type" id="crime_type" data-reactid=".0.0.0.0.1">
                      
-                    <a href="#myModal" class="btn btn-lg btn-outline" data-toggle="modal">Report</a>
+                    <a href="#myModal" class="btn btn-lg btn-outline" data-toggle="modal" onclick="myReport()">Report</a>
           <!-- end
                 </span>
                 </div> <!-- end of col -->
@@ -221,7 +221,7 @@
                             <h2>Report 李睿博</h2>
                             <hr class="star-primary">
                             <div class="row control-group">
-                                    <div class="col-lg-8 col-lg-offset-2">
+                                    <div class="col-lg-8 col-lg-offset-2" id="rpt_time">
                                         <p>Time: rape</p> 
                                     </div>
                                     <div class="col-lg-8 col-lg-offset-2">
@@ -253,7 +253,7 @@
                                     </div>
                             </div>
                             
-                            <button type="button" class="btn btn-lg btn-success" id="confirm" > Confirm </button>
+                            <button type="button" class="btn btn-lg btn-success" id="confirm"> Confirm </button>
 
                         </div>
                     </div>
@@ -261,15 +261,42 @@
             </div>
             
 	<script type="text/javascript">
-	    var submit = document.getElementById("confirm");
+
+        function myReport() {
+            var crime_location = document.getElementById("crime_loc").value;
+            var crime_date = document.getElementById("crime_date").value;
+            var crime_time = document.getElementById("crime_time").value;
+            var crime_type = document.getElementById("crime_type").value;
+            console.log(crime_location);
+            console.log(crime_date);
+            console.log(crime_time);
+            console.log(crime_type);
+
+            var crime_time_para = document.createElement("p");       
+            // crime_time_para.appendChild("hell");
+            document.getElementById("rpt_time").appendChild(crime_time_para);
+            // document.body.appendChild(btn);                    
+
+        }
+	
+
+
+
+        var submit = document.getElementById("confirm");
 	    submit.addEventListener("click", function(event) {
 	        event.preventDefault();
 	        plot();
 	    });
 	    
+
+        var crime_date = document.getElementById("crime_date").value;
+        console.log(crime_date);
+    // list.getElementsByTagName("LI")[0].innerHTML = "Milk";
+
+
         function plot() {
             var request = new XMLHttpRequest();
-            var crime_type = document.getElementById("type").value;
+            var crime_type = document.getElementById("crime_type").value;
 
             var query = {
             		"id": "boge",
