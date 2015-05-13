@@ -222,7 +222,7 @@
                             <hr class="star-primary">
                             <div class="row control-group">
                                     <div class="col-lg-8 col-lg-offset-2" id="rpt_time">
-                                        <p>Time: rape</p> 
+                                        <!-- <p>Time: rape</p>  -->
                                     </div>
                                     <div class="col-lg-8 col-lg-offset-2">
                                         <p>Date: rape</p> 
@@ -264,17 +264,19 @@
 
         function myReport() {
             var crime_location = document.getElementById("crime_loc").value;
-            var crime_date = document.getElementById("crime_date").value;
+            // var crime_date = document.getElementById("crime_date").value;
             var crime_time = document.getElementById("crime_time").value;
             var crime_type = document.getElementById("crime_type").value;
             console.log(crime_location);
-            console.log(crime_date);
+            // console.log(crime_date);
             console.log(crime_time);
             console.log(crime_type);
 
-            var crime_time_para = document.createElement("p");       
-            // crime_time_para.appendChild("hell");
-            document.getElementById("rpt_time").appendChild(crime_time_para);
+            //time 
+            var crime_time_p = document.createElement("p"); 
+            var crime_time = document.createTextNode("Time: " + document.getElementById("crime_time").value);      
+            crime_time_p.appendChild(crime_time);
+            document.getElementById("rpt_time").appendChild(crime_time_p);
             // document.body.appendChild(btn);                    
 
         }
