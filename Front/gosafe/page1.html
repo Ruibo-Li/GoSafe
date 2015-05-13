@@ -25,19 +25,9 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script src="https://maps.googleapis.com/maps/api/js"></script>
-    <script>
-      function initialize() {
-        var mapCanvas = document.getElementById('map-canvas');
-        var mapOptions = {
-          center: new google.maps.LatLng(40.782, -73.959), //according to user location
-          zoom: 14,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
-        var map = new google.maps.Map(mapCanvas, mapOptions)
-      }
-      google.maps.event.addDomListener(window, 'load', initialize);
-    </script>       
+    <!--script src="https://maps.googleapis.com/maps/api/js"></script>-->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=visualization"></script>
+
 
 </head>
 
@@ -54,7 +44,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Start Bootstrap</a>
+                <a href="index.html" class="navbar-brand" href="#">Crimes</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -74,6 +64,76 @@
         </div>
         <!-- /.container -->
     </nav>
+
+    <script type="text/javascript">
+        var map;
+        google.maps.event.addDomListener(window, 'load', initialize);    
+        var test = '{ "latitude": "40.782","longitude": "-73.959","crime_date":"2015-02-03"}';
+        var testjson = JSON.parse(test);
+        var lon = testjson.longitude;
+        var lat = testjson.latitude;
+        var text = testjson.crime_date;
+        var myLatlng = new google.maps.LatLng(40.782, -73.959);
+    
+
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            title:"Hello World!"
+        });
+
+        // To add the marker to the map, call setMap();
+        marker.setMap(map);
+
+
+        console.log(map);
+        console.log(lon);
+        console.log(lat);
+        console.log(text);
+
+        var url = window.location.search;
+
+        function query() {
+            var request = new XMLHttpRequest();
+            request.onload = reqListener;
+            request.open("GET", "Search" + url);
+            request.send();
+        }
+
+        function reqListener() {
+            var crimes = JSON.parse(this.responseText);
+            crimes.forEach(function(crime) {
+                var lon = crime.longtitude;
+                var lat = crime.latitude;
+                var text = crime.crime_date;
+                var myLatlng = new google.maps.LatLng(parseFloat(lat), parseFloat(lon));
+            
+
+                var marker = new google.maps.Marker({
+                    animation: google.maps.Animation.DROP,
+                    position : myLatlng
+                });
+                var infowindow = new google.maps.InfoWindow({
+                    content: text
+                });
+                  google.maps.event.addListener(marker, 'click', function() {
+                        infowindow.open(map,marker);
+                });
+
+                marker.setMap(map);
+                });
+        }
+
+      function initialize() {
+        var mapCanvas = document.getElementById('map-canvas');
+        var mapOptions = {
+          center: new google.maps.LatLng(40.782, -73.959), //according to user location
+          zoom: 14,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        map = new google.maps.Map(mapCanvas, mapOptions)
+      }        
+
+    </script>
 
     <!-- Full Page Image Background Carousel Header -->
     <!-- <div class="container"> -->
