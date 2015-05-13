@@ -262,22 +262,44 @@
             
 	<script type="text/javascript">
 
+        var info = {
+            "crime_date": "",
+            "crime_time": "",
+            "crime_loc": "",
+            "zipcode": "",
+            // "latitude": "86.87",
+            // "longitude": "-75.1762",
+            // "borough": "Manhattan",
+            "description": "",
+            "crime_type": ""            
+        };
+
+
+
         function myReport() {
-            var crime_location = document.getElementById("crime_loc").value;
+            // info.crime_time = document.getElementById("crime_time").value;
             // var crime_date = document.getElementById("crime_date").value;
-            var crime_time = document.getElementById("crime_time").value;
-            var crime_type = document.getElementById("crime_type").value;
-            console.log(crime_location);
+            // var crime_time = document.getElementById("crime_time").value;
+            // var crime_type = document.getElementById("crime_type").value;
+            // console.log(crime_location);
             // console.log(crime_date);
-            console.log(crime_time);
-            console.log(crime_type);
+            // console.log(crime_time);
+            // console.log(crime_type);
+
+
+            // Json object
+            info.crime_time = document.getElementById("crime_time").value
+            console.log(info.crime_time)
+
+
+
+
 
             //time 
             var crime_time_p = document.createElement("p"); 
             var crime_time = document.createTextNode("Time: " + document.getElementById("crime_time").value);      
             crime_time_p.appendChild(crime_time);
-            document.getElementById("rpt_time").appendChild(crime_time_p);
-            // document.body.appendChild(btn);                    
+            document.getElementById("rpt_time").appendChild(crime_time_p);                
 
         }
 	
