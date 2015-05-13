@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,30 +13,12 @@ public class WordID {
     static List<String> id2Word = new ArrayList<String>();
     static HashMap<String, Integer> word2Id = new HashMap<String, Integer>();
     static int size = 0;
-    /*
-    static void load(String input) throws IOException {
-        File fin = new File(input);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fin)));
-        String line = reader.readLine();
-        while(line!=null){
-            String[] words = split(line);//line.split(",");
-            for(int i=0; i<words.length; ++i){
-                String formatWord = words[i].trim();
-                if(!word2Id.containsKey(formatWord)){
-                    id2Word.add(formatWord);
-                    word2Id.put(formatWord, id2Word.size()-1);
-                }
-            }
-            line = reader.readLine();
-        }
-        reader.close();
-        size = id2Word.size();
-    }
-    */
+
     static void load(JSONArray input) throws Exception {
     	for(int i=0;i<input.length();i++) {
     		JSONObject cur = input.getJSONObject(i);
-    		Iterator <String> it = cur.keys();
+    		@SuppressWarnings("unchecked")
+			Iterator <String> it = cur.keys();
     		while(it.hasNext()) {
     			String key = it.next();
     			String word = cur.getString(key);
@@ -91,11 +72,4 @@ public class WordID {
         }
         return rst;
     }
-/*    public static void main(String[] args){
-        String str =  "East Tremont Ave ,Anthony Ave,E 176 St,WB,Commercial,15 - 50 - 1*50,15 - 100 - 0*100,15 - 300 - 0*300,16 - 50 - 1*50,16 - 100 - 0*100,16 - 300 - 0*300,17 - 50 - 1*50,17 - 100 - 0*100,17 - 300 - 0*300,18 - 50 - 0*50,18 - 100 - 0*100,18 - 300 - 0*300,19 - 50 - 0*50,19 - 100 - 0*100,19 - 300 - 0*300,20 - 50 - 0*50,20 - 100 - 0*100,20 - 300 - 0*300,21 - 50 - 0*50,21 - 100 - 0*100,21 - 300 - 0*300,22 - 50 - 0*50,22 - 100 - 0*100,22 - 300 - 0*300,23 - 50 - 0*50,23 - 100 - 0*100,23 - 300 - 0*300";
-        String[] rst = split(str);
-        for(int i=0; i<rst.length; ++i){
-            System.out.println(rst[i]);
-        }
-    }*/
 }

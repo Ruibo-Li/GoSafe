@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 
 import com.amazonaws.util.json.JSONArray;
+import com.amazonaws.util.json.JSONException;
 import com.amazonaws.util.json.JSONObject;
 
 
@@ -15,15 +16,7 @@ public class FrequentItems {
     private double threshold=0.7;//threshold to be frequent items.
     private double minConf = 0.7;//minimum confidence
     private List<ItemSet> frequentList=new ArrayList<ItemSet>();
-    /*
-    public FrequentItems(String inputPath, String delimiter, int threshold) throws IOException {
-        WordID.load(inputPath);
-        this.inputPath=inputPath;
-        this.delimiter = delimiter;
-        this.threshold=threshold;
-        this.itemSize = WordID.size;
-    }
-    */
+
     public FrequentItems(JSONArray inputPath) throws Exception {
         WordID.load(inputPath);
         this.inputPath=inputPath;
@@ -69,7 +62,8 @@ public class FrequentItems {
     	for(int i=0;i<inputPath.length();i++) {
     		bucketSize++;
     		JSONObject cur = inputPath.getJSONObject(i);
-    		Iterator <String> it = cur.keys();
+    		@SuppressWarnings("unchecked")
+			Iterator <String> it = cur.keys();
     		while(it.hasNext()) {
     			String key = it.next();
     			String word = cur.getString(key);
@@ -109,7 +103,8 @@ public class FrequentItems {
         
     	for(int k=0;k<inputPath.length();k++) {
     		JSONObject cur = inputPath.getJSONObject(k);
-    		Iterator <String> it = cur.keys();
+    		@SuppressWarnings("unchecked")
+			Iterator <String> it = cur.keys();
     		LinkedList <String> bucketlist = new LinkedList <String> ();
     		while(it.hasNext()) {
     			String key = it.next();
@@ -136,37 +131,7 @@ public class FrequentItems {
                 }
             }    		
     	}
-        
-        //Read file second time to find real frequent pairs from
-        //pair candidates C2.
-        /*
-        reader = new BufferedReader(new InputStreamReader(new FileInputStream(infile)));
 
-        while(true){
-            //read each line
-            bucket=reader.readLine();
-            if(bucket==null)    break;
-            bucketSplit = WordID.split(bucket);//bucket.split(delimiter);
-            for(int i=0;i<bucketSplit.length;++i){
-                int id = WordID.getId(bucketSplit[i]);
-                if(id<0) continue;
-                for(int j=i+1;j<bucketSplit.length;++j){
-                    //every possible pairs in each line.
-                    //if it appears in C2, count that pair in C2
-                    int id2 = WordID.getId(bucketSplit[j]);
-                    if(id2<0) continue;
-                    List<Integer> bucktlst = new ArrayList<Integer>();
-                    bucktlst.add(id);
-                    bucktlst.add(id2);
-                    Collections.sort(bucktlst);
-                    ItemSet ig = new ItemSet(bucktlst);
-                    if(C2.containsKey(ig)){//CONTAINS HAS BUG HERE!!! WE SHOULD USE OTHER DS!!
-                        C2.put(ig,C2.get(ig)+1);
-                    }
-                }
-            }
-        }
-        */
 
         //find true frequent pairs from C2
         for(ItemSet ig:C2.keySet()){
@@ -241,31 +206,10 @@ public class FrequentItems {
             }
             //System.out.println("Filter by k-comb subset");
             
-            /*
-            File infile = new File(inputPath);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(infile)));
-            String bucket = "";// reader.readLine();
-            String[] bucketSplit;
-            while (bucket != null) {
-                bucketSplit = WordID.split(bucket);
-                List<Integer> row = new ArrayList<Integer>();
-                for(int j=0; j<bucketSplit.length; ++j){
-                    row.add(WordID.getId(bucketSplit[j]));
-                }
-                Collections.sort(row);
-                for(ItemSet ckis: Ck.keySet()){
-                    if(isSubset(ckis.itemList, row)){
-                        //System.out.println("Hit");
-                        Ck.put(ckis, Ck.get(ckis)+1);
-                    }
-                }
-                bucket = reader.readLine();
-            }
-            reader.close();
-            */
         	for(int i=0;i<inputPath.length();i++) {
         		JSONObject cur = inputPath.getJSONObject(i);
-        		Iterator <String> it = cur.keys();
+        		@SuppressWarnings("unchecked")
+				Iterator <String> it = cur.keys();
         		List<Integer> row = new ArrayList<Integer>();
         		while(it.hasNext()) {
         			String key = it.next();
@@ -340,8 +284,14 @@ public class FrequentItems {
         }
     }
     private List<Rule> ruleList;
+    private JSONArray JSONrules;
+    
+    public JSONArray getJsonrules() {
+    	return JSONrules;
+    }
 
-    public void findRules(){
+    public void findRules() throws Exception{
+    	JSONrules = new JSONArray();
         Map<ItemSet,ItemSet> frequentMap = new HashMap<ItemSet,ItemSet>();
         for(ItemSet s : frequentList){
             frequentMap.put(s,s);
@@ -363,21 +313,31 @@ public class FrequentItems {
                     double conf = 1.0*lrSet.occurrence/leftSet.occurrence;
                     int supp = lrSet.occurrence*100/bucketSize;
                     if(conf>=minConf){
-                        StringBuilder sb = new StringBuilder();
-                        sb.append('[');
+                    	JSONObject jo = new JSONObject();
+                        //StringBuilder sb = new StringBuilder();
+                        //sb.append('[');
+                    	JSONArray lhs = new JSONArray();
                         for(int i=0;i<leftSet.itemList.size();i++) {
                             int leftId = leftSet.itemList.get(i);
                             String leftStr = WordID.getWord(leftId);
+                            lhs.put(leftStr);
+                            /*
                             sb.append(leftStr);
                             if(i<leftSet.itemList.size()-1)
                                 sb.append(", ");
                             else
                                 sb.append(']');
-                            //sb.append(leftStr+",,, ");
+                            sb.append(leftStr+",,, ");
+                            */
                         }
-                        sb.append("=> ");
-                        sb.append('['+WordID.getWord(singleId)+"] (Conf="+ conf*100 + "%, Supp=" + supp + "%)");
-                        ruleList.add(new Rule(sb.toString(), conf, supp));
+                        jo.put("lhs", lhs);
+                        //sb.append("=> ");
+                        //sb.append('['+WordID.getWord(singleId)+"] (Conf="+ conf*100 + "%, Supp=" + supp + "%)");
+                        jo.put("rhs", WordID.getWord(singleId));
+                        //ruleList.add(new Rule(sb.toString(), conf, supp));
+                        jo.put("support", supp);
+                        jo.put("confidence", conf*100);
+                        JSONrules.put(jo);
                     }
                 }
             }
@@ -437,5 +397,12 @@ public class FrequentItems {
         }
         writer.flush();
         writer.close();
+    }
+    public String[] getRules(){
+    	LinkedList <String> rule = new LinkedList <String> ();
+        for(Rule r: ruleList){
+        	rule.add(r.rule);
+        }
+        return rule.toArray(new String[rule.size()]);
     }
 }
