@@ -66,7 +66,7 @@
                     
                 </ul>
                 <form class="navbar-form pull-left">
-                    <input type="text" class="form-control" placeholder="Search with zipcode..." id="searchInput">
+                    <input type="text" class="form-control" placeholder="Search with Zip Code..." id="searchInput">
                     <button type="submit" class="btn btn-default" onclick="mySearch()">
                     <span class="glyphicon glyphicon-search" ></span></button>
                 </form>
@@ -84,28 +84,28 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1>welcome to gosafe</h1>  
-                        <h3>Your peronalized safeguard</h3>
+                        <h1>Welcome to GoSafe</h1>  
+                        <h3>Your Personalized Safety Assistant</h3>
                     </div>
                 </div> <!-- end row -->
             </div> <!-- end container -->
             <div class="navbar-form navbar-default">
                 <div class="col-lg-8 col-lg-offset-2">
                 
-                    <input id="crime_date" type="date" class="form-control" placeholder="date">
-                    <input id="crime_time" type="time" class="form-control" placeholder="time">
+                    <input id="crime_date" type="date" class="form-control" placeholder="Date">
+                    <input id="crime_time" type="time" class="form-control" placeholder="Time">
                     
-                    <input id="crime_loc" type="text" class="form-control" placeholder="location">
-                    <input id="crime_zip" type="text" class="form-control" placeholder="zipcode">
+                    <input id="crime_loc" type="text" class="form-control" placeholder="Street Address">
+                    <input id="crime_zip" type="text" class="form-control" placeholder="Zip Code">
                     <!-- <input id="crime_type" type="text" class="form-control" placeholder="crime type"> -->
                     <div class="form-group">
                         <select class="form-control" id="crime_type">
-                            <option>select crime type</option>
+                            <option>Select Crime Type</option>
                             <option>Rape</option>
                             <option>Sexual Assault</option>
                             <option>Robbery</option>
                             <option>Assault</option>
-                            <option>Burglay</option>
+                            <option>Burglary</option>
                             <option>Motor Vehicle Theft</option>
                             <option>Theft</option>
                             <option>Homicide</option>
@@ -176,7 +176,7 @@
                                 <div class="portfolio-box-caption-content">
                                 
                                     <div class="project-name">
-                                        Queen
+                                        Queens
                                     </div>
                                 </div>
                             </div>
@@ -235,6 +235,7 @@
                     <div class="col-lg-8 col-lg-offset-2">
                         <div class="modal-body">
                             <div class="alert alert-danger" id="invalid_date" type="hidden">Invalid Date. Please modify and re-submit again.</div>
+                            <div class="alert alert-danger" id="error" type="hidden"></div>
                             <div class="alert alert-success" id="submit_success" type="hidden">Successfully Submitted.</div>
                             <h2>Report</h2>
                             <hr class="star-primary">
@@ -508,20 +509,50 @@
             "crime_time": "",
             "address": "",
             "zipcode": "",
-            "description": "",
             "crime_type": ""            
         };
         var submit = document.getElementById("confirm");
         submit.addEventListener("click", function(event) {
             event.preventDefault();
-            if (checkDate()){
-                plot();
-                document.getElementById('submit_success').hidden = false;
+            if (checkDate())
+            	plot();
+            else
+                document.getElementById('invalid_date').hidden = false;
+        });
+        
+        function checkDate(){
+            var today = new Date();
+            var crime_date_dt = new Date(info.crime_date);
+            if (crime_date_dt > today){
+                return 0;
             }
             else
-                document.getElementById('invalid_date').hidden = false;            
-        });
+                return 1;
+        };
 
+        function plot() {
+            var request = new XMLHttpRequest();
+            var crime_description = document.getElementById("crime_descp").value;
+            console.log(crime_description);
+            console.log(crime_description.length);
+            if (crime_description != "")
+            	info.description = crime_description;
+            console.log(info)
+            request.onload = reqListener;
+            request.open("POST", "ReportCrime", true);
+            request.send(JSON.stringify(info));
+            return request.responseText;
+        };
+
+        function reqListener() {
+        	var message = this.responseText;
+            if (this.responseText == "Success")
+            	document.getElementById('submit_success').hidden = false;
+            else{
+            	document.getElementById('error').innerHTML = "Error: Please check your input and try again!";
+            	document.getElementById('error').hidden = false;
+            }
+        };
     </script>
 
 

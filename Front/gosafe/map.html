@@ -64,34 +64,18 @@
         </div>
         <!-- /.container -->
     </nav>
-
+    <div id="map-canvas"></div>
     <script type="text/javascript">
-        var map;
-        google.maps.event.addDomListener(window, 'load', initialize);    
-        var test = '{ "latitude": "40.782","longitude": "-73.959","crime_date":"2015-02-03"}';
-        var testjson = JSON.parse(test);
-        var lon = testjson.longitude;
-        var lat = testjson.latitude;
-        var text = testjson.crime_date;
-        var myLatlng = new google.maps.LatLng(40.782, -73.959);
+        var mapOptions = {
+          zoom: 14,
+          center: new google.maps.LatLng(40.782, -73.959)
+        }
+        var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+    </script>
+
+    <script>
+    	var url = window.location.search;
     
-
-        var marker = new google.maps.Marker({
-            position: myLatlng,
-            title:"Hello World!"
-        });
-
-        // To add the marker to the map, call setMap();
-        marker.setMap(map);
-
-
-        console.log(map);
-        console.log(lon);
-        console.log(lat);
-        console.log(text);
-
-        var url = window.location.search;
-
         function query() {
             var request = new XMLHttpRequest();
             request.onload = reqListener;
@@ -102,42 +86,27 @@
         function reqListener() {
             var crimes = JSON.parse(this.responseText);
             crimes.forEach(function(crime) {
-                var lon = crime.longtitude;
-                var lat = crime.latitude;
-                var text = crime.crime_date;
-                var myLatlng = new google.maps.LatLng(parseFloat(lat), parseFloat(lon));
-            
-
+                var coordinate = new google.maps.LatLng(crime.latitude, crime.longitude);
                 var marker = new google.maps.Marker({
                     animation: google.maps.Animation.DROP,
-                    position : myLatlng
+                    position: coordinate
                 });
                 var infowindow = new google.maps.InfoWindow({
-                    content: text
+                    content: crime.crime_date + " " + crime.crime_time + "\nA/An " + crime.crime_type + " happened at " + crime.formatted_address
                 });
-                  google.maps.event.addListener(marker, 'click', function() {
-                        infowindow.open(map,marker);
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.open(map,marker);
                 });
-
                 marker.setMap(map);
-                });
+            });
         }
-
-      function initialize() {
-        var mapCanvas = document.getElementById('map-canvas');
-        var mapOptions = {
-          center: new google.maps.LatLng(40.782, -73.959), //according to user location
-          zoom: 14,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
-        map = new google.maps.Map(mapCanvas, mapOptions)
-      }        
-
+        
+        query();
     </script>
 
     <!-- Full Page Image Background Carousel Header -->
     <!-- <div class="container"> -->
-        <div id="map-canvas"></div>
+        
     <!-- </div> end of container -->
 
     <!-- Page Content -->

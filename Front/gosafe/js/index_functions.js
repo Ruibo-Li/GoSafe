@@ -2,6 +2,7 @@ function myReport() {
     //hide the alert
     document.getElementById("submit_success").hidden = true;
     document.getElementById("invalid_date").hidden = true;
+    document.getElementById('error').hidden = true;
     // Json object
     info.crime_time = document.getElementById("crime_time").value
     info.crime_date = document.getElementById("crime_date").value
@@ -25,27 +26,3 @@ function mySearch(){
     var urlstring = "map.html?zipcode=" + zipcode;
     window.location = urlstring;
 }
-
-function checkDate(){
-    var today = new Date();
-    var crime_date_dt = new Date(info.crime_date);
-    if (crime_date_dt > today){
-        return 0;
-    }
-    else
-        return 1;
-};
-
-function plot() {
-    var request = new XMLHttpRequest();
-    info.description = document.getElementById("crime_descp").value
-    console.log(info)
-    request.onload = reqListener;
-    request.open("POST", "ReportCrime", true);
-    request.send(JSON.stringify(info));
-};
-
-function reqListener() {
-    var data = JSON.parse(this.responseText);
-    console.log(data);
-};
