@@ -53,10 +53,10 @@
                         <a class="page-scroll" href="#page-top"></a>
                     </li>
                     <li class="page-scroll">
-                        <a href="#about">About</a>
+                        <a href="index.html#about">About</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="#cities">Region</a>
+                        <a href="index.html#cities">Region</a>
                     </li>
                 </ul>
             </div>
@@ -66,16 +66,44 @@
     </nav>
     <div id="map-canvas"></div>
     <script type="text/javascript">
+    	var url = window.location.search;
+    	
+    	var queryKey = url.substring(1, url.indexOf("="));
+    	var queryValue = url.substring(url.indexOf("=") + 1, url.length);
+    	resetCenter(queryValue);
+    	
         var mapOptions = {
-          zoom: 14,
-          center: new google.maps.LatLng(40.782, -73.959)
+            zoom: 10,
+            center: new google.maps.LatLng(40.782, -73.959)
         }
+        
         var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+        
+        if (queryKey == "zipcode") {
+        	map.setZoom(15);
+        } else if (queryKey == "borough") {
+        	switch (queryValue) {
+        	case "manhattan":
+        		map.setZoom(13);
+        		break;
+        	case "brooklyn":
+        	case "queens":
+        		map.setZoom(12);
+        		break;
+        	}
+        }
+        
+        function resetCenter(location) {
+        	var geocoder = new google.maps.Geocoder();
+        	geocoder.geocode({'address': location}, function(results, status) {
+        		if (status == google.maps.GeocoderStatus.OK) {
+        			map.setCenter(results[0].geometry.location);
+        		}
+            });
+        }
     </script>
 
     <script>
-    	var url = window.location.search;
-    
         function query() {
             var request = new XMLHttpRequest();
             request.onload = reqListener;
@@ -91,11 +119,39 @@
                     animation: google.maps.Animation.DROP,
                     position: coordinate
                 });
+                switch (crime.crime_type) {
+	                case "RAPE":
+	                	console.log("this is a rape");
+	                case "SEXUAL ASSAULT":
+	                	marker.setIcon("img/markers/sex-crimes.png");
+	                	break;
+	                case "ROBBERY":
+	                	marker.setIcon("img/markers/robbery.png");
+	                	break;
+	                case "ASSAULT":
+	                	marker.setIcon("img/markers/assault.png");
+	                	break;
+	                case "BURGLARY":
+	                	marker.setIcon("img/markers/burglary.png");
+	                	break;
+	                case "MOTOR VEHICLE THEFT":
+	                	marker.setIcon("img/markers/motor-vehicle-theft.png");
+	                	break;
+	                case "THEFT":
+	                	marker.setIcon("img/markers/theft.png");
+	                	break;
+	                case "HOMICIDE":
+	                	marker.setIcon("img/markers/homicide.png");
+	                	break;
+	                default:
+	                	marker.setIcon("img/markers/other.png");   	
+                }
                 var infowindow = new google.maps.InfoWindow({
-                    content: crime.crime_date + " " + crime.crime_time + "\nA/An " + crime.crime_type + " happened at " + crime.formatted_address
+                    content: crime.crime_date + " " + crime.crime_time + "<br>A/An " + crime.crime_type + " happened at " + crime.formatted_address + "<br>DESCRIPTION: " + crime.description,
+                    maxWidth: 500
                 });
                 google.maps.event.addListener(marker, 'click', function() {
-                    infowindow.open(map,marker);
+                    infowindow.open(map, marker);
                 });
                 marker.setMap(map);
             });
@@ -104,37 +160,17 @@
         query();
     </script>
 
-    <!-- Full Page Image Background Carousel Header -->
-    <!-- <div class="container"> -->
-        
-    <!-- </div> end of container -->
-
-    <!-- Page Content -->
-    <div class="container">
-
-        <div class="row">
-            <div class="col-lg-12">
-                <h1>Full Slider by Start Bootstrap</h1>
-                <p>The background images for the slider are set directly in the HTML using inline CSS. The rest of the styles for this template are contained within the <code>full-slider.css</code>file.</p>
-            </div>
-        </div>
-
-        <hr>
-
-    </div><!-- /.container -->
-
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
 
-    <!-- Script to Activate the Carousel -->
     <script>
     $('.carousel').carousel({
         interval: 5000 //changes the speed
     })
-    </script> 
+    </script>
 
 </body>
 

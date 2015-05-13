@@ -12,7 +12,6 @@ import com.amazonaws.services.dynamodbv2.document.ItemCollection;
 import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.spec.ScanSpec;
-import com.amazonaws.util.json.JSONArray;
 import com.amazonaws.util.json.JSONException;
 import com.amazonaws.util.json.JSONObject;
 
@@ -28,23 +27,26 @@ public class QueryCrimeRequest {
 		table = new DynamoDB(dynamo).getTable("crimes");
 	}
 	
-	public JSONArray getCrimes() throws JSONException, ParseException {
+	public String getCrimes() throws JSONException, ParseException {
 		return getCrimes(null);
 	}
 	
-	public JSONArray getCrimes(JSONObject query) throws JSONException, ParseException {
-		JSONArray crimes = new JSONArray();
+	public String getCrimes(JSONObject query) throws JSONException, ParseException {
+		StringBuilder crimes = new StringBuilder();
+		crimes.append("[");
 		ScanSpec spec = new ScanSpec();
-		spec.withProjectionExpression("id, crime_date, crime_time, crime_type, latitude, longitude, zipcode, address, description, borough");
+		spec.withProjectionExpression("crime_date, crime_time, crime_type, formatted_address, latitude, longitude, description, zipcode, borough");
 		ItemCollection<ScanOutcome> item = table.scan(spec);
 		Iterator<Item> iter = item.iterator();
 		while (iter.hasNext()) {
 			Item crime = iter.next();
 			if (!matches(crime, query))
 				continue;
-			crimes.put(crime.toJSON());
+			crimes.append(crime.toJSON() + ",");
 		}
-		return crimes;
+		crimes.deleteCharAt(crimes.length() - 1);
+		crimes.append("]");
+		return crimes.toString();
 	}
 	
 	public boolean matches(Item crime, JSONObject query) throws JSONException, ParseException {
@@ -88,11 +90,6 @@ public class QueryCrimeRequest {
 	
 	public void shutdown() {
 		dynamo.shutdown();
-	}
-	
-	public static void main(String[] args) throws ParseException, JSONException {
-		QueryCrimeRequest data = new QueryCrimeRequest();
-		System.out.println(data.getCrimes(null).toString(2));
 	}
 	
 }

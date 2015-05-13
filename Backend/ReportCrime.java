@@ -17,6 +17,8 @@ import com.amazonaws.util.json.JSONObject;
  * Servlet implementation class ReportCrime
  */
 public class ReportCrime extends HttpServlet {
+	
+	private int count = 1;
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -40,14 +42,19 @@ public class ReportCrime extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ImportCrimeRequest importDataRequest = new ImportCrimeRequest();
 		try {
-			importDataRequest.importCrime(getRequestBody(request));
-		} catch (JSONException e) {
-			e.printStackTrace();
+			JSONObject crime = getRequestBody(request);
+			crime.put("id", String.format("u%d", count));
+			String status = importDataRequest.importCrime(crime);
+			response.getOutputStream().print(status);
+			if (status.equalsIgnoreCase("Success"))
+				count++;
+		} catch (Exception e) {
+			response.getOutputStream().print("Error: " + e.getMessage());
 		}
 		importDataRequest.shutdown();
 	}
 
-	private static JSONObject getRequestBody(HttpServletRequest request) throws IOException, JSONException {
+	public static JSONObject getRequestBody(HttpServletRequest request) throws IOException, JSONException {
 		InputStream inputStream = request.getInputStream();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 		StringBuilder builder = new StringBuilder();
