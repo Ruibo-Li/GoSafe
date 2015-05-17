@@ -3,8 +3,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
@@ -12,6 +12,7 @@ import com.amazonaws.services.dynamodbv2.document.ItemCollection;
 import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.spec.ScanSpec;
+import com.amazonaws.util.json.JSONArray;
 import com.amazonaws.util.json.JSONException;
 import com.amazonaws.util.json.JSONObject;
 
@@ -21,19 +22,18 @@ public class QueryCrimeRequest {
 	private AmazonDynamoDBClient dynamo;
 	
 	public QueryCrimeRequest() {
-		AWSCredentialsProvider credentialsProvider = new ClasspathPropertiesFileCredentialsProvider();
-		dynamo = new AmazonDynamoDBClient(credentialsProvider);
+		AWSCredentials credentials = new BasicAWSCredentials("AKIAJOEIWOBW6JQAF3IA", "2uxZjNVpKGOKT/KBZn32Y7jFXjT+l76X72Gnwa8R");
+		dynamo = new AmazonDynamoDBClient(credentials);
 		dynamo.setEndpoint("dynamodb.us-west-2.amazonaws.com");
 		table = new DynamoDB(dynamo).getTable("crimes");
 	}
 	
-	public String getCrimes() throws JSONException, ParseException {
+	public JSONArray getCrimes() throws JSONException, ParseException {
 		return getCrimes(null);
 	}
 	
-	public String getCrimes(JSONObject query) throws JSONException, ParseException {
-		StringBuilder crimes = new StringBuilder();
-		crimes.append("[");
+	public JSONArray getCrimes(JSONObject query) throws JSONException, ParseException {
+		JSONArray crimes = new JSONArray();
 		ScanSpec spec = new ScanSpec();
 		spec.withProjectionExpression("crime_date, crime_time, crime_type, formatted_address, latitude, longitude, description, zipcode, borough");
 		ItemCollection<ScanOutcome> item = table.scan(spec);
@@ -42,11 +42,9 @@ public class QueryCrimeRequest {
 			Item crime = iter.next();
 			if (!matches(crime, query))
 				continue;
-			crimes.append(crime.toJSON() + ",");
+			crimes.put(new JSONObject(crime.toJSON()));
 		}
-		crimes.deleteCharAt(crimes.length() - 1);
-		crimes.append("]");
-		return crimes.toString();
+		return crimes;
 	}
 	
 	public boolean matches(Item crime, JSONObject query) throws JSONException, ParseException {
@@ -85,7 +83,9 @@ public class QueryCrimeRequest {
 		}
 		if (query.has("crime_type") && !query.getString("crime_type").contains(crime.getString("crime_type")))
 			return false;
+		
 		return true;
+		
 	}
 	
 	public void shutdown() {

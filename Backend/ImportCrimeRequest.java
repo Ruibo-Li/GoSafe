@@ -2,8 +2,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
@@ -21,8 +21,8 @@ public class ImportCrimeRequest {
 					"zipcode", "crime_type", "description"}));
 	
 	public ImportCrimeRequest() {
-		AWSCredentialsProvider credentialsProvider = new ClasspathPropertiesFileCredentialsProvider();
-		dynamo = new AmazonDynamoDBClient(credentialsProvider);
+		AWSCredentials credentials = new BasicAWSCredentials("AKIAJOEIWOBW6JQAF3IA", "2uxZjNVpKGOKT/KBZn32Y7jFXjT+l76X72Gnwa8R");
+		dynamo = new AmazonDynamoDBClient(credentials);
 		dynamo.setEndpoint("dynamodb.us-west-2.amazonaws.com");
 		table = new DynamoDB(dynamo).getTable("crimes");
 	}
