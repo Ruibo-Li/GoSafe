@@ -2239,6 +2239,9 @@ pre code {
   .col-lg-offset-0 {
     margin-left: 0%;
   }
+  .col-lg-offset-13 {
+    margin-left: 36.66666667%;
+  }
 }
 table {
   background-color: transparent;
