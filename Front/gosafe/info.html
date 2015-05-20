@@ -138,7 +138,7 @@
     	<div class="row">
     		<div class="col-lg-9 col-lg-offset-5">
     			<!-- <button type="button" onclick="state()" class="btn btn-lg btn-warning" id="confirm"> Click here </button> -->
-    			<a href="#submit_address" class="btn btn-lg btn-warning" data-toggle="modal" >Submit your address</a>
+    			<a href="#submit_address" class="btn btn-lg btn-warning" data-toggle="modal" id="button">Submit your address</a>
     		</div>
     	</div>
     </div>
@@ -149,7 +149,7 @@
         <!-- First Featurette -->
         <div class="featurette" id="about">
             <img class="featurette-image img-circle img-responsive pull-right" src="img/portfolio/caution.png">
-            <h2 class="featurette-heading">This Recent Crimes In Your Area
+            <h2 class="featurette-heading">Recent Crimes In Your Area
                 <span class="text-muted"></span>
             </h2>
             <!-- <div class="col-lg-8 col-lg-offset-1">
@@ -164,7 +164,7 @@
                             </div>
                         </div>
             </div> -->
-            <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+            <p class="lead" id="recent-crimes">Log in and see recent crimes happened in your area.</p>
         </div>
 
         <hr class="featurette-divider">
@@ -172,10 +172,8 @@
         <!-- Second Featurette -->
         <div class="featurette" id="about">
             <img class="featurette-image img-circle img-responsive pull-right" src="img/portfolio/security.png">
-            <h2 class="featurette-heading">This First Heading
-                <span class="text-muted">Will Catch Your Eye</span>
-            </h2>
-            <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+            <h2 class="featurette-heading">Tips that concern your safety</h2>
+            <p class="lead" id="tips">Log in and see those tips that can better protect you and your family.</p>
         </div>
 
         <hr class="featurette-divider">
@@ -275,34 +273,23 @@
     </script>
 
     <script>
-    var accessToken = "";
     // This is called with the results from from FB.getLoginStatus().
     function statusChangeCallback(response) {
-      console.log('statusChangeCallback');
-      console.log(response);
-      accessToken = response.authResponse.accessToken;
       // The response object is returned with a status field that lets the
       // app know the current login status of the person.
       // Full docs on the response object can be found in the documentation
       // for FB.getLoginStatus().
       if (response.status === 'connected') {
-          document.getElementById('click').disabled=false;
-          document.getElementById('info_status').innerHTML = 'You have successfully logged in.'; 
+          document.getElementById('info_status').innerHTML = "You have successfully logged in."; 
         // Logged into your app and Facebook.
         CheckUser();
       } else if (response.status === 'not_authorized') {
         // The person is logged into Facebook, but not your app.
         document.getElementById('info_status').innerHTML = 'You should log in first.';
-        document.getElementById('click').disabled=true;
-        document.getElementById('status').innerHTML = 'Please log ' +
-          'into this app.';
       } else {
         // The person is not logged into Facebook, so we're not sure if
         // they are logged into this app or not.
         document.getElementById('info_status').innerHTML = 'You should log in first.';
-        document.getElementById('click').disabled=true;
-        document.getElementById('status').innerHTML = 'Please log ' +
-          'into Facebook.';
       }
     }
 
@@ -312,20 +299,21 @@
     function statefeedback(response) {
         console.log('current status: ' + response.status);
 
-      if (response.status !== 'connected') {
-    	  document.getElementById('info_status').innerHTML = 'You should log in first.';
-    	  
-      } else {
-          
-          document.getElementById('info_status').innerHTML = 'You have successfully logged in.';
-      }
+	      if (response.status !== 'connected') {
+	    	  document.getElementById('info_status').innerHTML = 'You should log in first.';
+	    	  document.getElementById("button").disabled = true;
+	      	  document.getElementById('recent-crimes').innerHTML = "Log in and see recent crimes happened in your area.";
+	      	  document.getElementById('tips').innerHTML = "Log in and see those tips that can better protect you and your family.";
+	      } else {
+	    	  document.getElementById("button").disabled = false;
+	          document.getElementById('info_status').innerHTML = 'You have successfully logged in.';
+	      }
     }
   
-    function state() {
-        console.log('zhe li de shan lu shi ba wan');
-      FB.getLoginStatus(function(response) {
-        statefeedback(response);  
-      });
+	    function state() {
+	      FB.getLoginStatus(function(response) {
+	        statefeedback(response);  
+	      });
    
     }
 
@@ -343,7 +331,7 @@
       cookie     : true,  // enable cookies to allow the server to access 
                           // the session
       xfbml      : true,  // parse social plugins on this page
-      version    : 'v2.2' // use version 2.2
+      version    : 'v2.3' // use version 2.2
     });
 
     // Now that we've initialized the JavaScript SDK, we call 
@@ -373,6 +361,8 @@
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
+    var updateReq = new Object();
+    
     // Here we run a very simple test of the Graph API after login is
     // successful.  See statusChangeCallback() for when this call is made.
     function CheckUser() {
@@ -385,15 +375,79 @@
         request.open("POST", "Registration", true);
         var obj = new Object();
         obj.id = response.id;
+        updateReq.id = response.id;
         obj.first_name = response.first_name;
         obj.last_name = response.last_name;
         obj.email = response.email;
-        obj.accessToken = accessToken;
         var jsonString= JSON.stringify(obj);
         console.log(jsonString);
         request.send(jsonString);
+        getCrimes(response.id);
+        getRules(response.id);
       });
     }
+    
+    var confirm = document.getElementById("confirm");
+    confirm.addEventListener("click", function(event) {
+        event.preventDefault();
+        updateAddress();
+    });
+    
+    function updateAddress() {
+    	updateReq.address = document.getElementById('submit_your_address').value;
+      	var request = new XMLHttpRequest();
+    	request.onload = reqListener;
+        request.open("PUT", "Registration", true);
+        request.send(JSON.stringify(updateReq));
+    }
+    
+    function reqListener() {
+    	var response = this.responseText;
+    	console.log(response);
+    }
+    
+    function getCrimes(id) {
+      	var request = new XMLHttpRequest();
+    	request.onload = getCrimeListener;
+        request.open("GET", "Crimes?id=" + id, true);
+        request.send();
+    }
+    
+    function getCrimeListener() {
+    	var response = JSON.parse(this.responseText);
+    	var crimes = "";
+    	response.forEach(function(crime) {
+    		crimes = crimes + crime.crime_date + " " + crime.crime_time + ": A/An " + crime.crime_type + " happened at " + crime.formatted_address + "<br/>"
+    	});
+    	document.getElementById('recent-crimes').innerHTML = crimes;
+    }
+    
+    function getRules(id) {
+      	var request = new XMLHttpRequest();
+    	request.onload = getRulesListener;
+        request.open("GET", "Rules?id=" + id, true);
+        request.send();
+    }
+    
+    function getRulesListener() {
+    	var response = JSON.parse(this.responseText);
+    	var rules = "";
+     	response.forEach(function(rule) {
+    		rules = rules + getFormattedLHS(rule.lhs) + " => " + rule.rhs + " (Confidence: " + (rule.confidence * 100).toFixed(2) + "%, Support: " + (rule.support * 100).toFixed(2) + "%)" + "<br/>"
+    	});
+     	rules = rules + "<br/>Notes: For the tips above, the combination of all factors on the left has a confidence to result in the crime on the right, where support indicates the probability of a crime.";
+    	document.getElementById('tips').innerHTML = rules;
+    }
+    
+    function getFormattedLHS(lhs) {
+/*     	var res = lhs.replace("\"", "").replace("[", "").replace("]", "").split(",");
+    	console.log(res); */
+    	var lhs = JSON.parse(lhs);
+    	return lhs.join(" & ");
+    }
+    
+    
+    
     </script>
 
 </body>

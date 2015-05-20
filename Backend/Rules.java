@@ -8,23 +8,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import DBManager.ImportCrimeRequest;
+import DBManager.ImportRulesRequest;
+import DBManager.QueryRulesRequest;
+import DBManager.UserRegistrationRequest;
 
+import com.amazonaws.util.json.JSONArray;
 import com.amazonaws.util.json.JSONException;
-import com.amazonaws.util.json.JSONObject;
 
 /**
- * Servlet implementation class ReportCrime
+ * Servlet implementation class Rules
  */
-public class ReportCrime extends HttpServlet {
-	
-	private int count = 1;
+public class Rules extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ReportCrime() {
+    public Rules() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,35 +33,45 @@ public class ReportCrime extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
+		String id = request.getParameter("id");
+		System.out.println(id);
+		UserRegistrationRequest getZipRequest = new UserRegistrationRequest();
+		try {
+			String zipcode = getZipRequest.getZipcode(id);
+			System.out.println(zipcode);
+			QueryRulesRequest queryRulesRequest = new QueryRulesRequest();
+			response.setContentType("application/json");
+			response.getOutputStream().print(queryRulesRequest.getRules(zipcode).toString());
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ImportCrimeRequest importDataRequest = new ImportCrimeRequest();
+		ImportRulesRequest importRulesRequest = new ImportRulesRequest();
 		try {
-			JSONObject crime = getRequestBody(request);
-			crime.put("id", String.format("u%d", count));
-			String status = importDataRequest.importCrime(crime);
+			JSONArray rules = getRequestBody(request);
+			String status = importRulesRequest.importRules(rules);
 			response.getOutputStream().print(status);
-			if (status.equalsIgnoreCase("Success"))
-				count++;
 		} catch (Exception e) {
 			response.getOutputStream().print("Error: " + e.getMessage());
 		}
-		importDataRequest.shutdown();
+		importRulesRequest.shutdown();
 	}
 
-	public static JSONObject getRequestBody(HttpServletRequest request) throws IOException, JSONException {
+	public static JSONArray getRequestBody(HttpServletRequest request) throws IOException, JSONException {
 		InputStream inputStream = request.getInputStream();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 		StringBuilder builder = new StringBuilder();
 		String line;
 		while ((line = reader.readLine()) != null)
 			builder.append(line);
-		JSONObject requestBody = new JSONObject(builder.toString());
+		JSONArray requestBody = new JSONArray(builder.toString());
 		reader.close();
 		return requestBody;
 	}

@@ -1,3 +1,5 @@
+package APIServices;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,22 +12,6 @@ import java.nio.charset.Charset;
 import com.amazonaws.util.json.JSONArray;
 import com.amazonaws.util.json.JSONException;
 import com.amazonaws.util.json.JSONObject;
-
-
-class Coordinate {
-	public String latitude;
-	public String longitude;
-	
-	public Coordinate(String latitude, String longitude) {
-		this.latitude = latitude;
-		this.longitude = longitude;
-	}
-	
-	public String toString() {
-		return String.format("(%s, %s)", latitude, longitude);
-	}
-}
-
 
 public class Geocoding {
 
