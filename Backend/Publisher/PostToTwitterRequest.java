@@ -19,10 +19,10 @@ public class PostToTwitterRequest implements Callable<String> {
 	public String call() throws TwitterException {
 		ConfigurationBuilder cb = new ConfigurationBuilder();
 		cb.setDebugEnabled(true)
-		  .setOAuthConsumerKey("P3wqXcdRlGmiLPfavPmFTQGfp")
-		  .setOAuthConsumerSecret("OFSYf4OqzuwwPYK30Lx3LYrm6N94oLrRbkteO0Q4EmKz7eSHz4")
-		  .setOAuthAccessToken("3252572254-gLd2JHxWmoeO9kEBFPIrSScXoS1wNRXZSQRLuhz")
-		  .setOAuthAccessTokenSecret("BWY0cZH5kQeQnTlESigjbI4FKVdyqf6DyIabySWQOxSn4");
+		  .setOAuthConsumerKey("")
+		  .setOAuthConsumerSecret("")
+		  .setOAuthAccessToken("")
+		  .setOAuthAccessTokenSecret("");
 		Twitter twitter = new TwitterFactory(cb.build()).getInstance();
 	    Status status = twitter.updateStatus(text);
 	    String result = "Successfully updated the status to [" + status.getText() + "].";
