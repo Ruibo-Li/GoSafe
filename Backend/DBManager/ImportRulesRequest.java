@@ -23,7 +23,7 @@ public class ImportRulesRequest {
 	private AmazonDynamoDBClient dynamo;
 	
 	public ImportRulesRequest() {
-		AWSCredentials credentials = new BasicAWSCredentials("AKIAJOEIWOBW6JQAF3IA", "2uxZjNVpKGOKT/KBZn32Y7jFXjT+l76X72Gnwa8R");
+		AWSCredentials credentials = new BasicAWSCredentials("", "");
 		dynamo = new AmazonDynamoDBClient(credentials);
 		dynamo.setEndpoint("dynamodb.us-west-2.amazonaws.com");
 	}
