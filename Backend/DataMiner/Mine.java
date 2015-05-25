@@ -12,14 +12,16 @@ public class Mine {
     public static void main(String[] args) throws Exception {
     	String inputfile = "INTEGRATED-DATASET.csv";
     	File outfile = new File(inputfile); 
-        BufferedWriter writer = new BufferedWriter(
+        @SuppressWarnings("resource")
+		BufferedWriter writer = new BufferedWriter(
                 new OutputStreamWriter(
                         new FileOutputStream(outfile)));
     	QueryCrimeRequest client = new QueryCrimeRequest();
     	JSONArray ja = client.getCrimes();
     	for(int i=0;i<ja.length();i++) {
     		JSONObject jo = ja.getJSONObject(i);
-    		Iterator <String> it = jo.keys();
+    		@SuppressWarnings("unchecked")
+			Iterator <String> it = jo.keys();
     		int curlen = jo.length();
     		int j = 0;
     		while(it.hasNext()) {

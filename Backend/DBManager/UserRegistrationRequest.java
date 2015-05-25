@@ -1,7 +1,5 @@
 package DBManager;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -54,22 +52,19 @@ public class UserRegistrationRequest {
 	}
 
 	public String updateAddress(String id, String address) {
-		GetItemSpec spec = new GetItemSpec()
-			.withPrimaryKey("id", id)
-			.withProjectionExpression("id, first_name, last_name, email, address");
-		Item item = table.getItem(spec);
-		item.withString("address", address);
-		table.putItem(item);
-		return "Success";
-	}
-	
-	public String getZipcode(String id) throws MalformedURLException, IOException, JSONException {
-		GetItemSpec spec = new GetItemSpec()
-		.withPrimaryKey("id", id)
-		.withProjectionExpression("address");
-		Item item = table.getItem(spec);
-		Geocoding geocoding = new Geocoding(item.getString("address"));
-		return geocoding.getZipcode();		
+		try {
+			GetItemSpec spec = new GetItemSpec()
+				.withPrimaryKey("id", id)
+				.withProjectionExpression("id, first_name, last_name, email, address");
+			Item item = table.getItem(spec);
+			Geocoding geocoding = new Geocoding(address);
+			item.withString("address", geocoding.getFormattedAddress())
+				.withString("zipcode", geocoding.getZipcode());
+			table.putItem(item);
+			return "Success";
+		} catch (Exception e) {
+			return e.getMessage();
+		}
 	}
 	
 	public boolean exists(String id) {

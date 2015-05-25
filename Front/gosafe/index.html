@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Gosafe</title>
+    <title>GoSafe</title>
 
     <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -560,11 +560,8 @@
         function plot() {
             var request = new XMLHttpRequest();
             var crime_description = document.getElementById("crime_descp").value;
-            console.log(crime_description);
-            console.log(crime_description.length);
             if (crime_description != "")
             	info.description = crime_description;
-            console.log(info)
             request.onload = reqListener;
             request.open("POST", "ReportCrime", true);
             request.send(JSON.stringify(info));
@@ -573,13 +570,17 @@
 
         function reqListener() {
         	var message = this.responseText;
-            if (this.responseText == "Success")
+        	console.log(message);
+            if (message == "Success") {
             	document.getElementById('submit_success').hidden = false;
-            else{
-            	document.getElementById('error').innerHTML = "Error: Please check your input and try again!";
+            	
+            } else{
+            	document.getElementById('error').innerHTML = message;
             	document.getElementById('error').hidden = false;
             }
         };
+        
+        
     </script>
 
 

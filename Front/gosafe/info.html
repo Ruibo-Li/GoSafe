@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>One Page Wonder - Start Bootstrap Template</title>
+    <title>GoSafe -- Your Personal Safety Assistant</title>
 
     <!-- Bootstrap Core CSS -->
   
@@ -184,7 +184,7 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; GoSafe 2014</p>
+                    <p>Copyright &copy; GoSafe 2015</p>
                 </div>
             </div>
         </footer>
@@ -209,6 +209,8 @@
                             <!-- <div class="alert alert-danger" id="invalid_date" type="hidden">Invalid Date. Please modify and re-submit again.</div>
                             <div class="alert alert-danger" id="error" type="hidden"></div>
                             <div class="alert alert-success" id="submit_success" type="hidden">Successfully Submitted.</div> -->
+                            <div class="alert alert-danger" id="invalid_address" style="display: none;">Invalid Address.</div>
+                            <div class="alert alert-success" id="submit_success" style="display: none;">Successfully Submitted.</div>
                             <h2>Submit</h2>
                             <hr class="star-primary">
                             <div class="row control-group">
@@ -303,11 +305,14 @@
 	    	  document.getElementById('info_status').innerHTML = 'You should log in first.';
 	    	  document.getElementById("button").disabled = true;
 	      	  document.getElementById('recent-crimes').innerHTML = "Log in and see recent crimes happened in your area.";
-	      	  document.getElementById('tips').innerHTML = "Log in and see those tips that can better protect you and your family.";
+	      	  document.getElementById('tips').innerHTML = "Log in and see those tips that better protect you and your family.";
 	      } else {
 	    	  document.getElementById("button").disabled = false;
 	          document.getElementById('info_status').innerHTML = 'You have successfully logged in.';
+	          getCrimes(response.id);
+	          getRules(response.id);
 	      }
+	      
     }
   
 	    function state() {
@@ -393,17 +398,35 @@
         updateAddress();
     });
     
+    var submitAdd = document.getElementById("button");
+    submitAdd.addEventListener("click", function(event) {
+    	document.getElementById('submit_success').style.display = "none";
+        document.getElementById('invalid_address').style.display = "none";
+        document.getElementById('submit_your_address').value = "";
+    }) ;
+    
+    function reqListener() {
+    	var message = this.responseText;
+    	console.log(message);
+    }
+    
     function updateAddress() {
     	updateReq.address = document.getElementById('submit_your_address').value;
       	var request = new XMLHttpRequest();
-    	request.onload = reqListener;
+    	request.onload = updateAddListener;
         request.open("PUT", "Registration", true);
         request.send(JSON.stringify(updateReq));
     }
     
-    function reqListener() {
-    	var response = this.responseText;
-    	console.log(response);
+    function updateAddListener() {
+    	var message = this.responseText;
+         if (message == "Success")
+        	document.getElementById('submit_success').style.display = "block";
+        else{
+        	document.getElementById('invalid_address').style.display = "block";
+        }
+        getCrimes(updateReq.id);
+        getRules(updateReq.id);
     }
     
     function getCrimes(id) {
@@ -415,11 +438,16 @@
     
     function getCrimeListener() {
     	var response = JSON.parse(this.responseText);
-    	var crimes = "";
-    	response.forEach(function(crime) {
-    		crimes = crimes + crime.crime_date + " " + crime.crime_time + ": A/An " + crime.crime_type + " happened at " + crime.formatted_address + "<br/>"
-    	});
-    	document.getElementById('recent-crimes').innerHTML = crimes;
+    	if (typeof response.message === "undefined") {
+        	var crimes = "";
+        	response.forEach(function(crime) {
+        		crimes = crimes + crime.crime_date + " " + crime.crime_time + ": A/An " + crime.crime_type + " happened at " + crime.formatted_address + "<br/>"
+        	});
+        	document.getElementById('recent-crimes').innerHTML = crimes;
+    	} else {
+    		document.getElementById('recent-crimes').innerHTML = response.message;
+    	}
+
     }
     
     function getRules(id) {
@@ -431,12 +459,18 @@
     
     function getRulesListener() {
     	var response = JSON.parse(this.responseText);
-    	var rules = "";
-     	response.forEach(function(rule) {
-    		rules = rules + getFormattedLHS(rule.lhs) + " => " + rule.rhs + " (Confidence: " + (rule.confidence * 100).toFixed(2) + "%, Support: " + (rule.support * 100).toFixed(2) + "%)" + "<br/>"
-    	});
-     	rules = rules + "<br/>Notes: For the tips above, the combination of all factors on the left has a confidence to result in the crime on the right, where support indicates the probability of a crime.";
-    	document.getElementById('tips').innerHTML = rules;
+    	
+    	if (typeof response.message === "undefined") {
+    		var rules = "";
+         	response.forEach(function(rule) {
+        		rules = rules + getFormattedLHS(rule.lhs) + " => " + rule.rhs + " (Confidence: " + (rule.confidence * 100).toFixed(2) + "%, Support: " + (rule.support * 100).toFixed(2) + "%)" + "<br/>"
+        	});
+         	rules = rules + "<br/>Notes: For the tips above, the combination of all factors on the left has a confidence to result in the crime on the right, where support indicates the probability of a crime.";
+        	document.getElementById('tips').innerHTML = rules;
+    	} else {
+    		document.getElementById('tips').innerHTML = response.message;
+    	}
+    	
     }
     
     function getFormattedLHS(lhs) {

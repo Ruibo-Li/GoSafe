@@ -55,7 +55,6 @@ public class QueryRulesRequest {
 				rules.put(rule);
 			}
 		}
-		System.out.println(rules);
 		return rules;
 	}
 	

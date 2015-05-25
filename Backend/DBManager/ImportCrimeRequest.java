@@ -20,6 +20,7 @@ public class ImportCrimeRequest {
 
 	private Table table;
 	private AmazonDynamoDBClient dynamo;
+	private String formatted_address;
 	private final HashSet<String> attributes = 
 			new HashSet<String>(Arrays.asList(new String[] {"id", "crime_date", "crime_time", "address",
 					"zipcode", "crime_type", "description"}));
@@ -52,16 +53,21 @@ public class ImportCrimeRequest {
 				geocoding = new Geocoding(crime.getString("address") + ", NY");
 				item.withString("zipcode", geocoding.getZipcode());
 			}
+			formatted_address = geocoding.getFormattedAddress();
 			item.withPrimaryKey("id", crime.getString("id"))
 				.withString("latitude", geocoding.getCoordinate().latitude)
 				.withString("longitude", geocoding.getCoordinate().longitude)
-				.withString("formatted_address", geocoding.getFormattedAddress())
+				.withString("formatted_address", formatted_address)
 				.withString("borough", geocoding.getBorough());
 			table.putItem(item);
 			return "Success";
 		} catch (Exception e) {
 			return "Error: " + e.getMessage();
 		}
+	}
+	
+	public String getFormattedAddress() {
+		return this.formatted_address;
 	}
 	
 	public boolean exists(String id) {

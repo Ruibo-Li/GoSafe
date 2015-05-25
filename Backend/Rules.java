@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import DBManager.ImportRulesRequest;
 import DBManager.QueryRulesRequest;
-import DBManager.UserRegistrationRequest;
+import DBManager.QueryUsersRequest;
 
 import com.amazonaws.util.json.JSONArray;
 import com.amazonaws.util.json.JSONException;
@@ -33,16 +33,28 @@ public class Rules extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		String id = request.getParameter("id");
-		System.out.println(id);
-		UserRegistrationRequest getZipRequest = new UserRegistrationRequest();
+		response.setContentType("application/json");
+
 		try {
-			String zipcode = getZipRequest.getZipcode(id);
-			System.out.println(zipcode);
-			QueryRulesRequest queryRulesRequest = new QueryRulesRequest();
-			response.setContentType("application/json");
-			response.getOutputStream().print(queryRulesRequest.getRules(zipcode).toString());
+			QueryUsersRequest getZipCodeRequest = new QueryUsersRequest();
+			String zipcode = getZipCodeRequest.getZipCode(id);
+			
+			if (zipcode == null) {
+				response.getOutputStream().print("{\"message\": \"Submit your address and see those tips that better protect you and your family.\"}");
+			} else {
+				QueryRulesRequest queryRulesRequest = new QueryRulesRequest();
+				JSONArray rules = queryRulesRequest.getRules(zipcode);
+				
+				if (rules.length() == 0)
+					response.getOutputStream().print("{\"message\": \"Unfortunately, we found no tips that concern you.\"}");
+				else
+					response.getOutputStream().print(rules.toString());
+				
+				queryRulesRequest.shutdown();
+			}
+			getZipCodeRequest.shutdown();
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
