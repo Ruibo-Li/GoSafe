@@ -24,7 +24,7 @@ public class UserRegistrationRequest {
 			new HashSet<String>(Arrays.asList(new String[] {"id", "first_name", "last_name", "email", "address"}));
 	
 	public UserRegistrationRequest() {
-		AWSCredentials credentials = new BasicAWSCredentials("AKIAJOEIWOBW6JQAF3IA", "2uxZjNVpKGOKT/KBZn32Y7jFXjT+l76X72Gnwa8R");
+		AWSCredentials credentials = new BasicAWSCredentials("", "");
 		dynamo = new AmazonDynamoDBClient(credentials);
 		dynamo.setEndpoint("dynamodb.us-west-2.amazonaws.com");
 		table = new DynamoDB(dynamo).getTable("users");
