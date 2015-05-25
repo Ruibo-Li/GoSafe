@@ -58,39 +58,6 @@ public class QueryRulesRequest {
 		return rules;
 	}
 	
-	public JSONArray getTopNRules(int n) throws JSONException {
-		PriorityQueue<JSONObject> sortedRules = new PriorityQueue<JSONObject>(rules.length(), new Comparator<JSONObject>() {
-
-			public int compare(JSONObject o1, JSONObject o2) {
-				double f1 = 0;
-				double f2 = 0;
-				try {
-					f1 = o1.getDouble("confidence");
-					f2 = o2.getDouble("confidence");
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				
-				if (f2 - f1 > 0)
-					return 1;
-				else if (f2 - f1 < 0)
-					return -1;
-				else
-					return 0;
-			}
-		});
-		
-		JSONArray rules = new JSONArray();
-		for (int i = 0; i < this.rules.length(); i++)
-			sortedRules.add(this.rules.getJSONObject(i));
-		for (int i = 0; i < n; i++) {
-			rules.put(sortedRules.peek());
-			System.out.println(sortedRules.poll());
-		}
-		return rules;
-	}
-	
-	
 	public void shutdown() {
 		dynamo.shutdown();
 	}
