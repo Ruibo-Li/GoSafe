@@ -17,7 +17,7 @@ public class Geocoding {
 
 	private JSONObject result;
 	private final String UTF_8 = Charset.forName("UTF-8").name();
-	private final String key = "AIzaSyDY-QZyhcNf_YnWf4PwMg-89vJoFYpyKNc";
+	private final String key = "";
     private final String url = "https://maps.googleapis.com/maps/api/geocode/json";
 	
     public Geocoding(String address) throws MalformedURLException, IOException, JSONException {
