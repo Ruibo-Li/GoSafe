@@ -27,7 +27,7 @@ public class SendEmailRequest implements Callable<String> {
 
 	public String call() throws Exception {
 		final String username = "gosafeny@gmail.com";
-		final String password = "judianbingzhang";
+		final String password = "";
  
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
